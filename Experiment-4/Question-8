@@ -1,0 +1,61 @@
+106. Construct Binary Tree from Inorder and Postorder Traversal
+Medium
+Topics
+Companies
+Given two integer arrays inorder and postorder where inorder is the inorder traversal of a binary tree and postorder is the postorder traversal of the same tree, construct and return the binary tree.
+
+ 
+
+Example 1:
+
+
+Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+Output: [3,9,20,null,null,15,7]
+Example 2:
+
+Input: inorder = [-1], postorder = [-1]
+Output: [-1]
+
+
+Code:
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] in, int[] post) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<in.length;i++){
+            map.put(in[i],i);
+        }
+        return helper(in,post,map,0,post.length-1);
+    }
+    int ind=0;
+    private TreeNode helper(int[] in,int[] post,HashMap<Integer,Integer> map,int s,int e){
+        if(s>e){
+            return null;
+        }
+        int val=post[post.length-1-ind];
+        ind++;
+        TreeNode root=new TreeNode(val);
+        if(s==e){
+            return root;
+        }
+        int i=map.get(val);
+        root.right=helper(in,post,map,i+1,e);
+        root.left=helper(in,post,map,s,i-1);
+        return root;
+    }
+}
